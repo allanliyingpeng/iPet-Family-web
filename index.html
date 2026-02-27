@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="pageTitle">i 宠家 - iPet Family | AI宠物品种识别、健康咨询、艺术照生成</title>
+    <meta name="description" data-i18n-content="pageDesc" content="AI宠物品种识别、健康咨询、艺术照生成，铲屎官们的必备神器">
+    <link rel="icon" type="image/png" href="assets/icon-web.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #4CAF50; 
+            --text-color: #222;       
+            --text-light: #666;
+            --text-muted: #999;
+            --bg-light: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to right, #ffffff 50%, #f8f9fa 50%);
+            position: relative; 
+        }
+
+        /* ── 全局入场动画 ── */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── 语言切换器 ── */
+        .lang-switcher {
+            position: fixed;
+            top: 24px;
+            right: 32px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 4px 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            animation: fadeSlideUp 0.8s ease-out forwards;
+        }
+
+        .lang-btn {
+            padding: 4px 10px;
+            border-radius: 14px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            font-family: inherit;
+            transition: background 0.2s, color 0.2s;
+            line-height: 1.4;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* ── 主容器 ── */
+        .container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr auto; 
+            align-content: center;
+            align-items: center; 
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 48px;
+            column-gap: 60px;
+        }
+
+        /* ── 左侧内容统一包裹层 ── */
+        .left-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px; 
+            max-width: 560px;
+        }
+
+        /* ── 左侧上部：logo / 名称 / slogan ── */
+        .product-top {
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease-out forwards;
+        }
+
+        /* ── 左侧下部：版本日志 / 下载按钮 ── */
+        .product-bottom {
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-name {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color);
+            letter-spacing: 1px;
+        }
+
+        .slogan {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        /* 更新日志 */
+        .update-log {
+            margin-bottom: 32px; 
+        }
+
+        .update-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px; 
+            font-size: 15px;
+        }
+
+        .update-item .version {
+            color: var(--text-light);
+        }
+
+        .update-item .date {
+            color: var(--text-muted);
+            margin-left: 12px;
+            font-weight: 400;
+        }
+
+        /* 下载按钮 */
+        .download-buttons {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 14px 28px;
+            background: var(--primary-color);
+            border-radius: 50px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: fit-content;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+        }
+
+        .download-btn:hover {
+            background: #43a047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.35);
+        }
+
+        .download-btn i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        /* ── 右侧截图展示区 ── */
+        .screenshot-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 32px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease-out 0.4s forwards;
+        }
+
+        /* 手机外壳 */
+        .phone-mockup {
+            width: 280px;
+            height: 560px;
+            background: #ffffff;
+            border-radius: 36px;
+            border: 8px solid #eef0f2;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            cursor: grab;
+        }
+
+        .phone-mockup:active {
+            cursor: grabbing;
+        }
+
+        /* 刘海 */
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 24px;
+            background: #eef0f2; 
+            border-radius: 12px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* ── 轮播结构 ── */
+        .carousel-track-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.35s ease;
+            will-change: transform;
+            user-select: none;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            display: block;
+        }
+
+        /* ── 轮播指示器 ── */
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        /* ── 手机下方品牌文字 ── */
+        .phone-brand {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .phone-brand-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .phone-brand-tagline {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ── 底部区域 ── */
+        footer {
+            background: transparent;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 48px;
+            opacity: 0;
+            animation: fadeSlideUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .copyright {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* ── 响应式适配 (移动端) ── */
+        @media (max-width: 768px) {
+            body {
+                background: #ffffff;
+            }
+
+            /* 调整 1：将顶部的留白和按钮位置放大 1.5 倍 (48px -> 72px) */
+            .lang-switcher {
+                position: absolute;
+                top: 72px; 
+                right: 24px;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px; 
+                padding: 72px 24px 48px; 
+                align-content: start;
+            }
+
+            /* 调整 2：通过消除左侧包裹层的物理隔断，并使用 order 进行重新排序 */
+            .left-content {
+                display: contents; /* 释放子元素参与网格排版 */
+            }
+
+            /* 第一部分出场：Logo、标题和 Slogan */
+            .product-top {
+                order: 1;
+            }
+
+            /* 第二部分出场：将手机截图区域插到中间 */
+            .screenshot-area {
+                order: 2;
+                background: #f8f9fa;
+                border-radius: 24px; 
+                padding: 40px 20px;
+                animation-delay: 0.2s; /* 调整动画顺序跟随视觉顺序 */
+            }
+
+            /* 第三部分出场：版本日志和下载按钮 */
+            .product-bottom {
+                order: 3;
+                align-items: flex-start;
+                animation-delay: 0.4s; /* 底部最后浮现 */
+            }
+
+            .update-item {
+                justify-content: flex-start;
+                text-align: left;
+            }
+
+            .download-buttons {
+                justify-content: flex-start;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .product-name {
+                font-size: 32px;
+            }
+
+            .slogan {
+                font-size: 16px;
+            }
+
+            .phone-mockup {
+                width: 240px;
+                height: 480px;
+            }
+
+            footer {
+                padding: 24px 24px;
+            }
+
+            .footer-content {
+                justify-content: flex-start;
+                text-align: left;
+            }
+
+            .footer-left {
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* 更小屏幕时，间距同样放大 1.5 倍 (40px -> 60px) */
+            .container {
+                padding: 60px 24px 32px;
+            }
+            
+            .lang-switcher {
+                top: 60px;
+                right: 24px;
+            }
+
+            footer {
+                padding: 20px 24px;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .download-btn {
+                width: 100%;
+                justify-content: center; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+
+    <main class="container">
+        <div class="left-content">
+            <div class="product-top">
+                <div class="logo">
+                    <img src="assets/icon-web.png" alt="i 宠家 Logo">
+                </div>
+                <h1 class="product-name" data-i18n="productName">i 宠家 - iPet Family</h1>
+                <p class="slogan" data-i18n="slogan">AI宠物品种识别、健康咨询、艺术照生成，铲屎官们的必备神器</p>
+            </div>
+
+            <div class="product-bottom">
+                <div class="update-log">
+                    <div class="update-item">
+                        <span class="version" data-i18n="iosUpdate">i 宠家 - iPet Family iOS版 1.0 正式上线</span>
+                        <span class="date">02-27</span>
+                    </div>
+                    <div class="update-item">
+                        <span class="version" data-i18n="androidUpdate">i 宠家 - iPet Family 安卓版 1.0 正式上线</span>
+                        <span class="date">02-26</span>
+                    </div>
+                </div>
+
+                <div class="download-buttons">
+                    <a href="#" class="download-btn">
+                        <i class="fab fa-apple"></i>
+                        <span data-i18n="iosBtn">iOS版</span>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <i class="fab fa-android"></i>
+                        <span data-i18n="androidBtn">Android版</span>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <i class="fab fa-google-play"></i>
+                        <span data-i18n="playStoreBtn">Play Store版</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <section class="screenshot-area">
+            <div class="phone-mockup" id="phoneMockup">
+                <div class="carousel-track-wrapper">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <span data-i18n="screenshot1">截图展示区 1<br>请替换为 App 截图</span>
+                        </div>
+                        <div class="carousel-slide">
+                            <span data-i18n="screenshot2">截图展示区 2<br>请替换为 App 截图</span>
+                        </div>
+                        <div class="carousel-slide">
+                            <span data-i18n="screenshot3">截图展示区 3<br>请替换为 App 截图</span>
+                        </div>
+                        <div class="carousel-slide">
+                            <span data-i18n="screenshot4">截图展示区 4<br>请替换为 App 截图</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-dots" id="carouselDots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+
+            <div class="phone-brand">
+                <p class="phone-brand-name" data-i18n="brandName">i 宠家 - iPet Family</p>
+                <p class="phone-brand-tagline" data-i18n="tagline">更懂你的宠物管家</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <p class="copyright" data-i18n="copyright">Copyright © 2026 i 宠家 - iPet Family. All Rights Reserved.</p>
+                <div class="footer-links">
+                    <a href="privacy.html" data-i18n="privacy">隐私政策</a>
+                    <a href="terms.html" data-i18n="terms">用户协议</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ── 轮播功能 ── */
+        (function () {
+            var track = document.getElementById('carouselTrack');
+            var dots = Array.from(document.querySelectorAll('#carouselDots .dot'));
+            var slideCount = dots.length;
+            var currentIndex = 0;
+            var autoTimer = null;
+
+            function goTo(index) {
+                currentIndex = (index + slideCount) % slideCount;
+                track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+                dots.forEach(function (d, i) {
+                    d.classList.toggle('active', i === currentIndex);
+                });
+            }
+
+            dots.forEach(function (dot, i) {
+                dot.addEventListener('click', function () {
+                    goTo(i);
+                    resetAutoPlay();
+                });
+            });
+
+            /* 触摸滑动 */
+            var touchStartX = 0;
+            var touchStartY = 0;
+
+            track.addEventListener('touchstart', function (e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            track.addEventListener('touchend', function (e) {
+                var dx = touchStartX - e.changedTouches[0].clientX;
+                var dy = touchStartY - e.changedTouches[0].clientY;
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+                    goTo(currentIndex + (dx > 0 ? 1 : -1));
+                    resetAutoPlay();
+                }
+            }, { passive: true });
+
+            /* 鼠标拖拽 */
+            var dragStartX = 0;
+            var dragging = false;
+
+            track.addEventListener('mousedown', function (e) {
+                e.preventDefault();
+                dragStartX = e.clientX;
+                dragging = true;
+                track.style.transition = 'none';
+            });
+
+            document.addEventListener('mousemove', function (e) {
+                if (!dragging) return;
+                var dx = e.clientX - dragStartX;
+                var base = -currentIndex * 100;
+                track.style.transform = 'translateX(calc(' + base + '% + ' + dx + 'px))';
+            });
+
+            document.addEventListener('mouseup', function (e) {
+                if (!dragging) return;
+                dragging = false;
+                track.style.transition = 'transform 0.35s ease';
+                var dx = e.clientX - dragStartX;
+                if (Math.abs(dx) > 40) {
+                    goTo(currentIndex + (dx < 0 ? 1 : -1));
+                    resetAutoPlay();
+                } else {
+                    track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+                }
+            });
+
+            /* 自动轮播 */
+            function startAutoPlay() {
+                autoTimer = setInterval(function () { goTo(currentIndex + 1); }, 3500);
+            }
+
+            function resetAutoPlay() {
+                clearInterval(autoTimer);
+                startAutoPlay();
+            }
+
+            startAutoPlay();
+        }());
+    </script>
+
+    <script src="js/i18n.js"></script>
+</body>
+</html>
