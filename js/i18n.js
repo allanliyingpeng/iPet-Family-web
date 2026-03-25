@@ -14,12 +14,12 @@
     var translations = {
         zh: {
             /* 页面 meta */
-            pageTitle:        'i 宠家 - iPet Family | AI宠物品种识别、健康咨询、艺术照生成',
-            pageDesc:         'AI宠物品种识别、健康咨询、艺术照生成，铲屎官们的必备神器',
+            pageTitle:        'iPet Family | 宠物提醒、宠物记账、AI 问答，铲屎官们的必备神器',
+            pageDesc:         '宠物提醒、宠物记账、AI 问答，铲屎官们的必备神器',
 
             /* 首页主内容 */
-            productName:      'i 宠家 - iPet Family',
-            slogan:           'AI宠物品种识别、健康咨询、艺术照生成，<br>铲屎官们的必备神器',
+            productName:      'iPet Family',
+            slogan:           '宠物提醒、宠物记账、AI 问答，铲屎官们的必备神器',
             iosUpdate:        'i 宠家 - iPet Family iOS 版 1.0 正式上线',
             androidUpdate:    'i 宠家 - iPet Family 安卓版 1.0 正式上线',
             iosBtn:           'iOS版',
@@ -33,19 +33,19 @@
             screenshot4:      '截图展示区 4<br>请替换为 App 截图',
 
             /* 手机下方品牌区 */
-            brandName:        'i 宠家 - iPet Family',
+            brandName:        'iPet Family',
             tagline:          '更懂你的宠物管家',
 
             /* Footer */
-            copyright:        'Copyright © 2026 i 宠家 - iPet Family. All Rights Reserved.',
+            copyright:        'Copyright © 2026 iPet Family. All Rights Reserved.',
             privacy:          '隐私政策',
             terms:            '用户协议',
 
             /* 隐私政策页 */
-            privacyPageTitle: '隐私政策 - i 宠家 iPet Family',
+            privacyPageTitle: '隐私政策 - iPet Family',
 
             /* 用户协议页 */
-            termsPageTitle:   '用户协议 - i 宠家 iPet Family',
+            termsPageTitle:   '用户协议 - iPet Family',
 
             /* 公共 */
             backHome:         '← 返回首页'
@@ -53,12 +53,12 @@
 
         en: {
             /* 页面 meta */
-            pageTitle:        'iPet Family | AI Pet Breed Recognition, Health & Art Photos',
-            pageDesc:         'AI Pet Breed Recognition, Health Consultation & Art Photo Generation — A Must-Have for Pet Owners',
+            pageTitle:        'iPet Family | Pet Reminders, Expense Tracking, and AI Q&A —The Must-Have Toolkit for Pet Parents',
+            pageDesc:         'Pet Reminders, Expense Tracking, and AI Q&A —The Must-Have Toolkit for Pet Parents',
 
             /* 首页主内容 */
             productName:      'iPet Family',
-            slogan:           'AI Pet Breed Recognition, Health Consultation & Art Photo Generation — A Must-Have for Cat and Dog Owners',
+            slogan:           'Pet Reminders, Expense Tracking, and AI Q&A —The Must-Have Toolkit for Pet Parents',
             iosUpdate:        'iPet Family iOS 1.0 Now Available',
             androidUpdate:    'iPet Family Android 1.0 Now Available',
             iosBtn:           'iOS',
